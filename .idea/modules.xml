@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Wit.ai-E-Portfolio.iml" filepath="$PROJECT_DIR$/Wit.ai-E-Portfolio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wit.ai/wit.ai.iml" filepath="$PROJECT_DIR$/wit.ai/wit.ai.iml" />
     </modules>
   </component>
 </project>

@@ -1,11 +1,11 @@
 package de.fstraub.main;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -57,7 +57,13 @@ public class GUI extends JFrame {
 		wit = new Wit("V7TD6H2JWIUVM5GNYEBPEF3PQNAEPDRQ");
 		rec = new JavaSoundRecorder();
 
-		setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("/img/wit.png")));
+		try {
+			Image img = ImageIO.read(getClass().getResourceAsStream("/resources/wit.png"));
+			setIconImage(img);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		setTitle("Wit.ai Client");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -86,10 +92,10 @@ public class GUI extends JFrame {
 				rec.cancel();
 				isRecording = false;
 				btnNewButton.setEnabled(false);
-				btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/img/rec.png")));
+				btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(GUI.class.getResource("/img/cancel.png")));
+		btnNewButton.setIcon(new ImageIcon(GUI.class.getResource("/resources/cancel.png")));
 		panel_1.add(btnNewButton, BorderLayout.EAST);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -102,18 +108,18 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(!isRecording){
 					btnNewButton.setEnabled(true);
-					btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/img/stop.png")));
+					btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/stop.png")));
 					rec.start();
 				}else{
 					btnNewButton.setEnabled(false);
-					btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/img/rec.png")));
+					btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
 					rec.finish();
 					textArea.setText(wit.sendSpeechRequest(rec.wavFile));
 				}
 				isRecording = !isRecording;
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/img/rec.png")));
+		btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
 		panel_1.add(btnNewButton_1, BorderLayout.CENTER);
 
 		JButton btnNewButton_2 = new JButton("Send");
