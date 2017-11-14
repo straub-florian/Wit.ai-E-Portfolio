@@ -7,14 +7,14 @@ import java.io.*;
  * A sample program is to demonstrate how to record sound in Java author:
  * www.codejava.net
  */
-public class JavaSoundRecorder {
+public class Recorder {
 
 	public  File wavFile = new File("record.wav");
 	private AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
 	private Thread recordThread;
 	private volatile TargetDataLine line;
 
-	public JavaSoundRecorder(){
+	public Recorder(){
 		wavFile.deleteOnExit();
 	}
 

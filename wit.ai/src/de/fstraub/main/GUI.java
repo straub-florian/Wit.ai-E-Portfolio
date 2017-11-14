@@ -32,7 +32,7 @@ public class GUI extends JFrame {
     private JTextArea  ta_textOutput;
 
 	private Wit wit;
-	private JavaSoundRecorder rec;
+	private Recorder rec;
 	private boolean isRecording;
 
 	/**
@@ -63,7 +63,7 @@ public class GUI extends JFrame {
 	 */
 	public GUI() {
 		wit = new Wit(ACCESS_TOKEN);
-		rec = new JavaSoundRecorder();
+		rec = new Recorder();
 
 		try {
 			Image img = ImageIO.read(getClass().getResourceAsStream("/resources/wit.png"));
