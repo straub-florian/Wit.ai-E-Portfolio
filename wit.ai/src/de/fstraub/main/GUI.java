@@ -3,6 +3,7 @@ package de.fstraub.main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -20,8 +21,15 @@ import javax.swing.JScrollPane;
 public class GUI extends JFrame {
 
 	private static final long serialVersionUID = 2484809953602059008L;
+	private final String ACCESS_TOKEN = "[REPLACE WITH TOKEN]",
+                         TITLE        = "Wit.ai Client";
+
+
 	private JPanel contentPane;
-	private JTextField textField;
+	private JButton btn_cancel_recording;
+    private JButton btn_record;
+	private JTextField tf_textInput;
+    private JTextArea  ta_textOutput;
 
 	private Wit wit;
 	private JavaSoundRecorder rec;
@@ -31,6 +39,7 @@ public class GUI extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+	    // Set System Look and Feel
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e1) {
@@ -50,11 +59,10 @@ public class GUI extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the GUI frame.
 	 */
 	public GUI() {
-
-		wit = new Wit("V7TD6H2JWIUVM5GNYEBPEF3PQNAEPDRQ");
+		wit = new Wit(ACCESS_TOKEN);
 		rec = new JavaSoundRecorder();
 
 		try {
@@ -64,7 +72,7 @@ public class GUI extends JFrame {
 			e.printStackTrace();
 		}
 
-		setTitle("Wit.ai Client");
+		setTitle(TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -76,63 +84,89 @@ public class GUI extends JFrame {
 		contentPane.add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new BorderLayout(0, 0));
 
-		textField = new JTextField();
-		panel.add(textField, BorderLayout.CENTER);
-		textField.setColumns(10);
+        JPanel panel_1 = new JPanel();
+        panel.add(panel_1, BorderLayout.EAST);
+        panel_1.setLayout(new BorderLayout(0, 0));
 
-		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, BorderLayout.EAST);
-		panel_1.setLayout(new BorderLayout(0, 0));
+		tf_textInput = new JTextField();
+		panel.add(tf_textInput, BorderLayout.CENTER);
+		tf_textInput.setColumns(10);
 
-		JButton btnNewButton_1 = new JButton("");
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setEnabled(false);
-		btnNewButton.addActionListener(new ActionListener() {
+        JScrollPane scrollPane = new JScrollPane();
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+
+        ta_textOutput = new JTextArea();
+        ta_textOutput.setEditable(false);
+        scrollPane.setViewportView(ta_textOutput);
+
+		btn_cancel_recording = new JButton("");
+		btn_cancel_recording.setEnabled(false);
+		btn_cancel_recording.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rec.cancel();
 				isRecording = false;
-				btnNewButton.setEnabled(false);
-				btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
+				btn_cancel_recording.setEnabled(false);
+				btn_record.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(GUI.class.getResource("/resources/cancel.png")));
-		panel_1.add(btnNewButton, BorderLayout.EAST);
+		btn_cancel_recording.setIcon(new ImageIcon(GUI.class.getResource("/resources/cancel.png")));
+		panel_1.add(btn_cancel_recording, BorderLayout.EAST);
 
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
 
-		JTextArea textArea = new JTextArea();
-		scrollPane.setViewportView(textArea);
-
-		btnNewButton_1.addActionListener(new ActionListener() {
+        btn_record = new JButton("");
+		btn_record.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!isRecording){
-					btnNewButton.setEnabled(true);
-					btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/stop.png")));
+					btn_cancel_recording.setEnabled(true);
+					btn_record.setIcon(new ImageIcon(GUI.class.getResource("/resources/stop.png")));
 					rec.start();
 				}else{
-					btnNewButton.setEnabled(false);
-					btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
+					btn_cancel_recording.setEnabled(false);
+					btn_record.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
 					rec.finish();
-					textArea.setText(wit.sendSpeechRequest(rec.wavFile));
+					sendSpeechRequest(rec.wavFile);
 				}
 				isRecording = !isRecording;
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
-		panel_1.add(btnNewButton_1, BorderLayout.CENTER);
+
+		btn_record.setIcon(new ImageIcon(GUI.class.getResource("/resources/rec.png")));
+		panel_1.add(btn_record, BorderLayout.CENTER);
 
 		JButton btnNewButton_2 = new JButton("Send");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(textField.getText() != null && textField.getText().length() > 0)
-					textArea.setText(wit.sendTextRequest(textField.getText()));
+				if(tf_textInput.getText() != null && tf_textInput.getText().length() > 0){
+                    sendTextRequest(tf_textInput.getText());
+				}
 			}
 		});
 		panel_1.add(btnNewButton_2, BorderLayout.WEST);
-
-
-
 	}
+
+    /**
+     * sends a speech request to the wit.ai server and handles the response
+     * @param wavFile the speech request (recorded with the microphone) that should be interpreted
+     */
+    private void sendSpeechRequest(File wavFile) {
+        // TODO: send a speech request to wit.ai
+
+        WitResponse r = wit.sendSpeechRequest(wavFile);
+
+        // TODO: handle received request data
+    }
+
+    /**
+     * sends a speech request to the wit.ai server and handles the response
+     * @param text the text that should be interpreted
+     */
+    private void sendTextRequest(String text){
+        // TODO: send a speech request to wit.ai
+
+        WitResponse r = wit.sendTextRequest(text);
+
+        // TODO: handle received request data
+    }
+
 
 }

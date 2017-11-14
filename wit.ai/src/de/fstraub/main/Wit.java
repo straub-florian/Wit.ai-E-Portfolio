@@ -1,5 +1,7 @@
 package de.fstraub.main;
 
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -20,71 +22,26 @@ public class Wit {
 		this.authID = authID;
 	}
 
-	public String sendTextRequest(String request) {
-	    if(request.length() < 0 || request.length() > 255)
-	        return "Your query is invalid. Length must be > 0 and < 256";
+	public WitResponse sendTextRequest(String request) {
+        if (request.length() < 0 || request.length() > 255) {
+            System.err.println("Your query is invalid. Length must be > 0 and < 256");
+            return null;
+        }
 
-		URL url = null;
-		String response = null;
-		try {
-			url = new URL("https://api.wit.ai/message?v=12.11.2017&q=" + URLEncoder.encode(request, "UTF-8"));
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			authorize(connection);
-			connection.connect();
+		URL url = null; // https://api.wit.ai/message?v=12.11.2017&q=
+        JSONObject response = null;
 
-			response = getResponse(connection);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        //TODO: Connect to wit.ai, send a text request and handle the response
 
-		return response;
-	}
-	public String sendSpeechRequest(File waveFile) {
-		URL url;
-		String response = null;
-		try {
-			url = new URL("https://api.wit.ai/speech");
-
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setUseCaches(false);
-			connection.setDoOutput(true); // indicates POST method
-			connection.setDoInput(true);
-
-			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Connection", "Keep-Alive");
-			connection.setRequestProperty("Cache-Control", "no-cache");
-			authorize(connection);
-			connection.setRequestProperty("Content-Type", "audio/wav");
-			;
-			byte[] bytes = Files.readAllBytes(waveFile.toPath());
-			DataOutputStream request = new DataOutputStream(connection.getOutputStream());
-			request.write(bytes);
-			request.flush();
-			request.close();
-
-			response = getResponse(connection);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return response;
+		return new WitResponse(response);
 	}
 
-	private void authorize(HttpURLConnection connection) {
-		connection.setRequestProperty("Authorization", String.format("Bearer %s", authID));
-	}
+	public WitResponse sendSpeechRequest(File waveFile) {
+		URL url = null; // https://api.wit.ai/speech
+		JSONObject response = null;
 
-	private String getResponse(HttpsURLConnection connection) throws IOException {
-		String ret = null;
-		int status = connection.getResponseCode();
-		if (status == HttpsURLConnection.HTTP_OK) {
-			InputStream responseStream = new BufferedInputStream(connection.getInputStream());
-			ret = Util.streamToString(responseStream);
-			connection.disconnect();
-			return ret;
-		} else if(status == HttpsURLConnection.HTTP_BAD_REQUEST){
-			return "Wit.ai could not interpret your input!";
-		}else{
-			throw new IOException("Server returned non-OK status: " + status);
-		}
+        //TODO: Connect to wit.ai, send a speech request and handle the response
+
+		return  new WitResponse(response);
 	}
 }
