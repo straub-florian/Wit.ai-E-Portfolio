@@ -23,27 +23,27 @@ Follow the instructions until you see the welcome page of your app.
 
 ### Step 2 - Create your app
 
-![create_app](documentation/img/create_app.png)
+![create_app](/documentation/img/create_app.png)
 
 ### Step 3 - Detect you first entity
 
-![detect_first_entity](documentation/img/detect_first_entity.gif)
+![detect_first_entity](/documentation/img/detect_first_entity.gif)
 
 ### Step 4 - Improve detection
 
-![improve_detection](documentation/img/improve_detection.gif)
+![improve_detection](/documentation/img/improve_detection.gif)
 
 ### Step 5 - Query your app
 
-![query_app](documentation/img/query_app.gif)
+![query_app](/documentation/img/query_app.gif)
 
 ### Step 6 - Add a new entity value
 
-![add_new_entity](documentation/img/add_new_entity.gif)
+![add_new_entity](/documentation/img/add_new_entity.gif)
 
 ### Step 7 - Capture more
 
-![capture_more](documentation/img/capture_more.gif)
+![capture_more](/documentation/img/capture_more.gif)
 
 
 
