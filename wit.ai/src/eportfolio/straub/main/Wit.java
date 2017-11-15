@@ -1,18 +1,9 @@
-package de.fstraub.main;
+package eportfolio.straub.main;
 
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.file.Files;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class Wit {
 

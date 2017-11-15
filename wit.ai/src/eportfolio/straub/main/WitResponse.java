@@ -1,4 +1,4 @@
-package de.fstraub.main;
+package eportfolio.straub.main;
 
 import org.json.JSONObject;
 
